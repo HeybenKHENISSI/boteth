@@ -16,10 +16,10 @@ client.on('ready', () => {
 let passe = 0;
 let mem;
 const idserv = "317263352353128448";
-const idrolewhitelist = "916347449809989654";
+const idrolewhitelist = "membre";
 const idrolebest = "912793132729528330";
 const idrolenul = "913858262888235068";
-const idroleadmin = "913150249747488788";
+const idroleadmin = "owner";
 
 
 client.on("message", async message => {
