@@ -121,7 +121,7 @@ client.on("message", async message => {
             if (arg[1].startsWith("0x") || arg[1].startsWith("yes")) {
                 console.log("-1");
                 ///////////////////////////////////
-                if (bdd["liste"][message.author.id]) {
+                /*if (bdd["liste"][message.author.id]) {
                     console.log("0");
                     console.log("passe : " + passe);
 
@@ -150,9 +150,10 @@ client.on("message", async message => {
                     }
                 }
                 else {
-               
+               */
                     scan(arg[1], message.author.username, message.author.id, message, 1);
-            }
+           // }
+                /////////////////////////
             }
             else {
                 message.channel.send("Le portefeuille n'est pas valide");
