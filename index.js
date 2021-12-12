@@ -120,9 +120,39 @@ client.on("message", async message => {
         else {
             if (arg[1].startsWith("0x") || arg[1].startsWith("yes")) {
                 console.log("-1");
+                ///////////////////////////////////
+                if (bdd["liste"][message.author.id]) {
+                    console.log("0");
+                    console.log("passe : " + passe);
+
+                    if (passe === 0) {
+                        if (arg[1].startsWith("0x")) {
+                            console.log("1");
+                            message.channel.send("Vous avez deja enregistrez une adresse de portefeuille : " + bdd["liste"][message.author.id]["adresse"] + ", voulez vous la remplacer par " + arg[1] + " ? (tapez !wallet yes)");
+                            passe = 1;
+                            console.log("passe : " + passe);
+                            mem = arg[1];
+                        }
+                    }
+                    else if (passe === 1) {
+                        passe = 0;
+                        console.log("2");
+                        if (message.content.startsWith(prefix + "wallet")) {
+                            console.log("3");
+                            if (!arg[1]) {
+                                message.channel.send("Vous n'avez rien spécifié, l'ajout de la nouvel adresse est annulé");
+                            }
+                            else if (arg[1] === "yes") {
+                                console.log("4");
+                                scan(mem, message.author.username, message.author.id, message, 1);
+                            }
+                        }
+                    }
+                }
+                else {
                
                     scan(arg[1], message.author.username, message.author.id, message, 1);
-               
+            }
             }
             else {
                 message.channel.send("Le portefeuille n'est pas valide");
