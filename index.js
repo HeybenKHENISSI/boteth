@@ -65,7 +65,7 @@ client.on("message", async message => {
                         const roleName = member.roles.cache.find(r => r.name === idrolewhitelist)
                    
                       if (member.user.id == bdd["liste"][nom_clee]["id"]) {
-                        member.roles.remove('916347449809989654');
+                        //member.roles.remove('916347449809989654');
                         member.roles.add(idrolenul);
                         }
                      
@@ -79,7 +79,7 @@ client.on("message", async message => {
                         const roleName = member.roles.cache.find(r => r.name === idrolewhitelist)
                      
                       if (member.user.id == bdd["liste"][nom_clee]["id"]) {
-                        member.roles.remove('916347449809989654');
+                        //member.roles.remove('916347449809989654');
                         member.roles.add(idrolebest);
                         }
                      
