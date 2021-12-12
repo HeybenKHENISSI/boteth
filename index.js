@@ -5,6 +5,7 @@ const client = new Discord.Client();
 const fs = require("fs");
 const bdd = require("./bdd.json");
 const { channel } = require("diagnostics_channel");
+const XLSX = require('xlsx')
 let seuil;
 client.on('ready', () => {
     console.log("go");
@@ -14,6 +15,10 @@ client.on('ready', () => {
 
 let passe = 0;
 let mem;
+const idserv = "317263352353128448";
+const idrolewhitelist = "913150249747488788";
+const idrolebest = "912793132729528330";
+const idrolenul = "913858262888235068";
 
 client.on("message", async message => {
     let prefix = "!";
@@ -40,38 +45,70 @@ client.on("message", async message => {
                     message.channel.send("seuil invalide");
                 }
             } catch (error) {
-                //console.error(error);
                 message.channel.send("Le seuil est invalide");
             }
         }
     }
     else if (message.content.startsWith(prefix + "start")) {
         if (message.member.roles.cache.some(role => role.name === 'owner')) {
-            // console.log(bdd["liste"][1]["pseudo"] + " a " + bdd["liste"][1]["ETH"] + "ETH");
+            let student = [];
+       
             for (var nom_clee in bdd["liste"]) {
-                //message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " ancien solde : " + bdd["liste"][nom_clee]["ETH"]);
+               
                 scan(bdd["liste"][nom_clee]["adresse"], bdd["liste"][nom_clee]["pseudo"], bdd["liste"][nom_clee]["id"], message, 0);
-                // message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " nouveau solde : " + bdd["liste"][nom_clee]["ETH"]);
                 seuil = bdd["seuil"]["niveau"];
                 if (bdd["liste"][nom_clee]["ETH"] < seuil) {
+                    var list = client.guilds.cache.get(idserv);
+                    list.members.cache.array().forEach(member => {
+                        const roleName = member.roles.cache.find(r => r.name === idrolewhitelist)
+                   
+                      if (member.user.id == bdd["liste"][nom_clee]["id"]) {
+                       
+                        member.roles.add(idrolenul);
+                        }
+                     
+                    });
                     message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " n'a pas assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + "), il est retiré de la white list");
                     console.log(bdd["liste"][nom_clee]["pseudo"] + " n'a pas assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + ")");
                 }
                 else {
+                    var list = client.guilds.cache.get(idserv);
+                    list.members.cache.array().forEach(member => {
+                        const roleName = member.roles.cache.find(r => r.name === idrolewhitelist)
+                     
+                      if (member.user.id == bdd["liste"][nom_clee]["id"]) {
+                        
+                        member.roles.add(idrolebest);
+                        }
+                     
+                    });
+                 
+                    student.push({ name: bdd["liste"][nom_clee]["pseudo"], adresse: bdd["liste"][nom_clee]["adresse"], eth: bdd["liste"][nom_clee]["ETH"] })
                     message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " a assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + ")");
                     console.log(bdd["liste"][nom_clee]["pseudo"] + " a assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + ")");
                 }
-                //console.log(nom_clee);
 
             }
+            const convertJsonToExcel = () => {
+
+                const workSheet = XLSX.utils.json_to_sheet(student);
+                const workBook = XLSX.utils.book_new();
+            
+                XLSX.utils.book_append_sheet(workBook, workSheet, "student")
+                // Generate buffer
+                XLSX.write(workBook, { bookType: 'xlsx', type: "buffer" })
+            
+                // Binary string
+                XLSX.write(workBook, { bookType: "xlsx", type: "binary" })
+            
+                XLSX.writeFile(workBook, "studentsData.xlsx")
+            
+            }
+            convertJsonToExcel()
         }
+        message.channel.send("Testing message.", { files: ["./studentsData.xlsx"] });
     }
-    /*else if (passe === 1){
-        if(!message.content.startsWith(prefix + "wallet") && arg[1] != "yes"){
-        console.log("passe : " + passe + " devient : 0");
-        passe = 0;
-        }
-    }*/
+   
     else if (message.content.startsWith(prefix + "wallet")) {
         console.log("-------");
         if (!arg[1]) {
@@ -80,37 +117,9 @@ client.on("message", async message => {
         else {
             if (arg[1].startsWith("0x") || arg[1].startsWith("yes")) {
                 console.log("-1");
-                if (bdd["liste"][message.author.id]) {
-                    console.log("0");
-                    console.log("passe : " + passe);
-
-                    if (passe === 0) {
-                        if (arg[1].startsWith("0x")) {
-                            console.log("1");
-                            message.channel.send("Vous avez deja enregistrez une adresse de portefeuille : " + bdd["liste"][message.author.id]["adresse"] + ", voulez vous la remplacer par " + arg[1] + " ? (tapez !wallet yes)");
-                            passe = 1;
-                            console.log("passe : " + passe);
-                            mem = arg[1];
-                        }
-                    }
-                    else if (passe === 1) {
-                        passe = 0;
-                        console.log("2");
-                        if (message.content.startsWith(prefix + "wallet")) {
-                            console.log("3");
-                            if (!arg[1]) {
-                                message.channel.send("Vous n'avez rien spécifié, l'ajout de la nouvel adresse est annulé");
-                            }
-                            else if (arg[1] === "yes") {
-                                console.log("4");
-                                scan(mem, message.author.username, message.author.id, message, 1);
-                            }
-                        }
-                    }
-                }
-                else {
+               
                     scan(arg[1], message.author.username, message.author.id, message, 1);
-                }
+               
             }
             else {
                 message.channel.send("Le portefeuille n'est pas valide");
@@ -119,20 +128,11 @@ client.on("message", async message => {
         console.log("OFFF passe : " + passe);
     }
     else{
-       // message.channel.send("tgrtgrgtrgtrgtrgtrgtrgtr");
+      
     }
     
 
-    /*if (passe === 1 && message.content.startsWith(prefix + "wallet") && arg[1] === "yes") {
-        if (passe === 1) {
-        console.log("passe : " + passe + "devient : 0");
-       passe = 0;
-       }
-    }
-    else{
-        console.log("passe : " + passe + "devient : 0");
-        passe = 0;
-    }*/
+  
 
 })
 
@@ -150,14 +150,12 @@ function scan(portefeuille, nom, idd, ll, a) {
                     ll.channel.send("tu a " + iiii + " ETH, ton portefeuille à été enregistré");
                 }
                 else {
-                   // ll.channel.send("ppp");
                 }
                 Savebdd();
                 return result;
             }
         })
     } catch (error) {
-        //console.error(error);
         ll.channel.send("Le portefeuille que tu a renseigner n'existe pas");
     }
 }
