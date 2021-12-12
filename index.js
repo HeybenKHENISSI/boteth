@@ -16,15 +16,17 @@ client.on('ready', () => {
 let passe = 0;
 let mem;
 const idserv = "317263352353128448";
-const idrolewhitelist = "913150249747488788";
+const idrolewhitelist = "916347449809989654";
 const idrolebest = "912793132729528330";
 const idrolenul = "913858262888235068";
+const idroleadmin = "913150249747488788";
+
 
 client.on("message", async message => {
     let prefix = "!";
     let arg = message.content.trim().split(/ +/g)
     if (message.content.startsWith(prefix + "seuil")) {
-        if (message.member.roles.cache.some(role => role.name === 'owner')) {
+        if (message.member.roles.cache.some(role => role.name === idroleadmin)) {
             try {
                 let lol = parseFloat(arg[1]);
                 if (!arg[1]) {
@@ -50,7 +52,7 @@ client.on("message", async message => {
         }
     }
     else if (message.content.startsWith(prefix + "start")) {
-        if (message.member.roles.cache.some(role => role.name === 'owner')) {
+        if (message.member.roles.cache.some(role => role.name === idroleadmin)) {
             let student = [];
        
             for (var nom_clee in bdd["liste"]) {
@@ -101,7 +103,7 @@ client.on("message", async message => {
                 // Binary string
                 XLSX.write(workBook, { bookType: "xlsx", type: "binary" })
             
-                XLSX.writeFile(workBook, "studentsData.xlsx")
+                XLSX.writeFile(workBook, "WhitelistOff.xlsx")
             
             }
             convertJsonToExcel()
@@ -110,6 +112,7 @@ client.on("message", async message => {
     }
    
     else if (message.content.startsWith(prefix + "wallet")) {
+        if (message.member.roles.cache.some(role => role.name === idrolewhitelist)) {
         console.log("-------");
         if (!arg[1]) {
             return message.channel.send("Vous n'avez pas spécifié votre porte feuille");
@@ -126,6 +129,7 @@ client.on("message", async message => {
             }
         }
         console.log("OFFF passe : " + passe);
+        }
     }
     else{
       
