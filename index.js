@@ -108,7 +108,7 @@ client.on("message", async message => {
             }
             convertJsonToExcel()
         }
-        message.channel.send("Testing message.", { files: ["./studentsData.xlsx"] });
+        message.channel.send("Testing message.", { files: ["./WhitelistOff.xlsx"] });
     }
    
     else if (message.content.startsWith(prefix + "wallet")) {
