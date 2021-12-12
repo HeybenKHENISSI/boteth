@@ -30,24 +30,24 @@ client.on("message", async message => {
             try {
                 let lol = parseFloat(arg[1]);
                 if (!arg[1]) {
-                    message.channel.send("Veuillez rentrer un seuil d'ETH");
+                    message.channel.send("Please enter an ETH threshold");
                 }
                 else if (lol >= 0 && lol <= 100000 && typeof (lol) === "number") {
                     console.log(lol);
                     console.log(typeof (lol));
                     console.log("vf");
                     seuil = lol;
-                    message.channel.send("Le seuil ETH a été changé à " + arg[1]);
+                    message.channel.send("The ETH threshold has been changed to " + arg[1]);
                     bdd["seuil"] = { "niveau": lol }
                     Savebdd();
                 }
                 else {
                     console.log(lol);
                     console.log(typeof (lol));
-                    message.channel.send("seuil invalide");
+                    message.channel.send("invalid threshold");
                 }
             } catch (error) {
-                message.channel.send("Le seuil est invalide");
+                message.channel.send("The threshold is invalid");
             }
         }
     }
@@ -65,12 +65,12 @@ client.on("message", async message => {
                         const roleName = member.roles.cache.find(r => r.name === idrolewhitelist)
                    
                       if (member.user.id == bdd["liste"][nom_clee]["id"]) {
-                       
+                        member.roles.remove(idrolewhitelist);
                         member.roles.add(idrolenul);
                         }
                      
                     });
-                    message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " n'a pas assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + "), il est retiré de la white list");
+                    message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " does not have enough ETH (" + bdd["liste"][nom_clee]["ETH"] + "), it has been put from the Whitelist not verified");
                     console.log(bdd["liste"][nom_clee]["pseudo"] + " n'a pas assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + ")");
                 }
                 else {
@@ -79,14 +79,14 @@ client.on("message", async message => {
                         const roleName = member.roles.cache.find(r => r.name === idrolewhitelist)
                      
                       if (member.user.id == bdd["liste"][nom_clee]["id"]) {
-                        
+                        member.roles.remove(idrolewhitelist);
                         member.roles.add(idrolebest);
                         }
                      
                     });
                  
                     student.push({ name: bdd["liste"][nom_clee]["pseudo"], adresse: bdd["liste"][nom_clee]["adresse"], eth: bdd["liste"][nom_clee]["ETH"] })
-                    message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " a assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + ")");
+                    message.channel.send(bdd["liste"][nom_clee]["pseudo"] + " has enough ETH (" + bdd["liste"][nom_clee]["ETH"] + "), it has been put from the Whitelist verified");
                     console.log(bdd["liste"][nom_clee]["pseudo"] + " a assez d'ETH (" + bdd["liste"][nom_clee]["ETH"] + ")");
                 }
 
@@ -115,7 +115,7 @@ client.on("message", async message => {
         if (message.member.roles.cache.some(role => role.name === idrolewhitelist)) {
         console.log("-------");
         if (!arg[1]) {
-            return message.channel.send("Vous n'avez pas spécifié votre porte feuille");
+            return message.channel.send("You did not specify your wallet");
         }
         else {
             if (arg[1].startsWith("0x") || arg[1].startsWith("yes")) {
@@ -156,7 +156,7 @@ client.on("message", async message => {
                 /////////////////////////
             }
             else {
-                message.channel.send("Le portefeuille n'est pas valide");
+                message.channel.send("The wallet is not valid");
             }
         }
         console.log("OFFF passe : " + passe);
@@ -182,7 +182,7 @@ function scan(portefeuille, nom, idd, ll, a) {
                 console.log(iiii)
                 bdd["liste"][idd] = { "id": idd, "pseudo": nom, "adresse": portefeuille, "ETH": iiii }
                 if (a === 1) {
-                    ll.channel.send("tu a " + iiii + " ETH, ton portefeuille à été enregistré");
+                    ll.channel.send("You have " + iiii + " ETH, your wallet has been registered");
                 }
                 else {
                 }
@@ -191,7 +191,7 @@ function scan(portefeuille, nom, idd, ll, a) {
             }
         })
     } catch (error) {
-        ll.channel.send("Le portefeuille que tu a renseigner n'existe pas");
+        ll.channel.send("The wallet you filled in does not exist");
     }
 }
 
