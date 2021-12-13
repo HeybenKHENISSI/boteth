@@ -15,11 +15,11 @@ client.on('ready', () => {
 
 let passe = 0;
 let mem;
-const idserv = "317263352353128448";
-const idrolewhitelist = "membre";
-const idrolebest = "912793132729528330";
-const idrolenul = "913858262888235068";
-const idroleadmin = "owner";
+const idserv = "904299435591364639";
+const idrolewhitelist = "905019169290977310";
+const idrolebest = "919981146094317628";
+const idrolenul = "919981574068510770";
+const idroleadmin = "905018125186134026";
 
 
 client.on("message", async message => {
@@ -197,7 +197,7 @@ function scan(portefeuille, nom, idd, ll, a) {
 
 function Savebdd() {
     fs.writeFile("./bdd.json", JSON.stringify(bdd, null, 4), (err) => {
-        if (err) message.channel.send("Une erreur est survenue.");
+        if (err) message.channel.send("An error has occurred.");
     });
 }
 client.login(process.env.token);
