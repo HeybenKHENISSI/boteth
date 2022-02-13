@@ -15,11 +15,11 @@ client.on('ready', () => {
 
 let passe = 0;
 let mem;
-const idserv = "904299435591364639";
-const idrolewhitelist = "🎩⎮ Electos Sodales";
-const idrolebest = "919981146094317628";
-const idrolenul = "919981574068510770";
-const idroleadmin = "🪙⎮ Consulatu";
+const idserv = "922826381862248468";
+const idrolewhitelist = "Whitelist";
+const idrolebest = "942354260849479681";
+const idrolenul = "942354350263660565";
+const idroleadmin = "Staff";
 
 
 client.on("message", async message => {
